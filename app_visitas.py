@@ -22,6 +22,25 @@ from supabase import create_client
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 st.set_page_config(page_title="DepaFix · Visitas Pro", layout="wide")
+
+# --- BLOQUEO DE SEGURIDAD ---
+if "autenticado" not in st.session_state:
+    st.session_state.autenticado = False
+
+if not st.session_state.autenticado:
+    st.title("🔒 Acceso Restringido")
+    st.write("Por favor, ingresa la contraseña para acceder al sistema.")
+    password = st.text_input("Contraseña:", type="password")
+    if st.button("Ingresar"):
+        # Cambia "DepaFix2026" por la contraseña que tu quieras
+        if password == "DepaFix2026":
+            st.session_state.autenticado = True
+            st.rerun()
+        else:
+            st.error("Contraseña incorrecta")
+    st.stop()
+# ----------------------------
+
 st.title("🏠 DepaFix · Sistema Predictivo de Visitas")
 
 @st.cache_data(ttl=30)
